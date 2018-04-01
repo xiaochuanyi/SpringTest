@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:p="http://www.springframework.org/schema/p" xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd ">
+	<bean name="user" class="Beans.User">
+		<property name="name" value="nima"></property>
+		<property name="age" value="18"></property>
+		<property name="car" ref="car"></property>
+	</bean>
+	<bean name="car" class="Beans.Car">
+		<property name="name" value="bwm"></property>
+		<property name="color" value="bule"></property>
+	</bean>	
+	<bean name="user2" class="Beans.User">
+		<constructor-arg name="name" value="weless" index="0"></constructor-arg>
+		<constructor-arg name="age" value="17" index="1"></constructor-arg>
+		<constructor-arg name="car" ref="car" index="2"></constructor-arg>
+	</bean>
+	<bean name="user3" class="Beans.User" p:name="jerry" p:age="15" p:car-ref="car"></bean>
+	<bean name="user4" class="Beans.User">
+		<property name="name" value="#{user.name}"></property>
+		<property name="age" value="#{user.age}"></property>
+		<property name="car" ref="car"></property>
+	</bean> 
+	<bean name="cb" class="Beans.CollectionBean">
+	<property name="arr"> <!-- 数组注入 -->
+		<array>
+			<value>12</value>
+			<value>小明</value>
+			<ref bean="user"/>
+		</array>	
+	</property>
+	<property name="list"> <!-- 集合注入 -->
+		<list>
+			<value>小光</value>
+			<value>小李</value>
+			<ref bean="user2"/>
+		</list>	
+	</property>
+	<property name="map"> <!-- 集合注入 -->
+		<map>
+			<entry key="1" value="nihao"></entry>
+			<entry key-ref="user3" value-ref="car"></entry>
+		</map>	
+	</property>
+	<property name="properties">
+		<props>
+			<prop key="drive">com.mysql.jdbc.Driver</prop>
+			<prop key="jdbcUrl">jdbc:mysql://localhost:3306/test</prop>
+			<prop key="user">root</prop>
+			<prop key="password">xcy199776</prop>
+		</props>
+	</property>
+	</bean>
+</beans>

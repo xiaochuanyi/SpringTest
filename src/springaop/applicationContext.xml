@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd ">
+	<!-- 准备工作：导入aop命名空间 -->
+	<!-- 1.配置目标对象 -->
+	<bean name="userservicetarget" class="/Spring/src/service/UserServiceImpl.java"></bean>
+	<!--2.配置通知对象 -->
+	<bean name="myadvice" class="/Spring/src/aspects/MyAdvice.java"></bean>
+	<!--3.配置将通知织入目标对象
+	public void service.UserServiceImpl.save(),其中public void 可以省略，如果要对被代理对象的
+	* service.UserServiceImpl.*()  所有方法进行增强，，方法返回值任意
+	*service.UserServiceImpl.*(..)即对方法的参数不做任何要求，有也可以，没有也可以
+	*service.*ServiceImpl.*(..) 即对service包下以ServiceImpl结尾的类进行增强
+	*service..*ServiceImpl.*(..)即对service包和其子包下的所有以ServiceImpl结尾的类增强
+	-->
+	<aop:config>
+		<aop:pointcut expression="*service.*ServiceImpl.*(..))" id="pc"/>
+		<aop:aspect ref="myAdvice">
+		<!-- 从 myAdvice中找到before方法对指定为pc的类进行前置增强-->
+		<aop:before method="before" pointcut-ref="pc"/>
+		<!-- 从 myAdvice中找到afterreturning方法对指定为pc的类进行后置增强，出现异常不调用，后面以此类推-->
+		<aop:after-returning method="afterreturning" pointcut-ref="pc"/>
+		<aop:after-throwing method="afterthorwing" pointcut-ref="pc"/>
+		<aop:around method="around" pointcut-ref="pc"/>
+		<aop:after method="after" arg-names="pc"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
